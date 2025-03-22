@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { useNavigate } from "react-router";
-import { Button } from "@/components/ui/button";
-
+import EmbedPreview from "./embedder";
 export interface Page {
   title: string;
   backgroundColor: string;
@@ -13,18 +11,17 @@ export interface Page {
   content: string;
   link?: string;
   imageUrl?: string;
+  embedCode?: string;
 }
 
 const PageViewer: React.FC<{ page: Page }> = ({ page }) => {
-  const navigate = useNavigate();
-
   const styles: React.CSSProperties = {};
   if (page.backgroundColor) {
     styles.backgroundColor = page.backgroundColor;
   }
   if (page.imageUrl) {
     styles.backgroundImage = `url(${page.imageUrl})`;
-    styles.backgroundSize = "fill";
+    styles.backgroundSize = "cover";
   }
   if (page.fontFamily) {
     styles.fontFamily = page.fontFamily;
@@ -33,12 +30,15 @@ const PageViewer: React.FC<{ page: Page }> = ({ page }) => {
     styles.color = page.fontColor;
   }
 
+  console.log(styles, page.fontFamily);
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center p-4"
       style={styles}
     >
-      <div className="max-w-3xl w-full text-center">
+      <div
+        className={`max-w-3xl w-full text-center space-y-5 overflow-x break-all ${page.fontFamily}`}
+      >
         {page.headerSize == "sm" ? (
           <h1 className="text-sm">{page.content}</h1>
         ) : page.headerSize == "md" ? (
@@ -68,11 +68,7 @@ const PageViewer: React.FC<{ page: Page }> = ({ page }) => {
           </a>
         )}
 
-        <div className="mt-12">
-          <Button variant="outline" onClick={() => navigate("/")}>
-            Create Your Own Page
-          </Button>
-        </div>
+        {page.embedCode && <EmbedPreview embedCode={page.embedCode} />}
       </div>
     </div>
   );
