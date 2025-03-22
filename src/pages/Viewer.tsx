@@ -23,7 +23,7 @@ export default function ViewPage() {
     };
 
     const timer = setTimeout(() => {
-      const pageData = decodePageUrl(pageId);
+      const pageData = decodePageUrl(pageId!);
       if (pageData) {
         setPage(pageData);
       } else {
@@ -68,7 +68,7 @@ export default function ViewPage() {
         </div>
       }
     >
-      <PageViewer page={page} />
+      <PageViewer page={page!} />
     </Suspense>
   );
 }
